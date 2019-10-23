@@ -96,40 +96,69 @@ function getWinner(board, staticY, staticX, player) {
   let startRow = staticY - 4
   if (startRow < 0) { startRow = 0 }
   let endRow = staticY + 4
-  if (endRow > selectedSize - 1) { endRow = selectedSize - 1}
+  if (endRow > selectedSize - 1) { endRow = selectedSize - 1 }
   let startButton = staticX - 4
   if (startButton < 0) { startButton = 0 }
   let endButton = staticX + 4
-  if (endButton > selectedSize -1) { endButton = selectedSize -1}
-
+  if (endButton > selectedSize - 1) { endButton = selectedSize - 1 }
   for (let i = startRow; i <= endRow; i++) {
-    if (board[i][staticX].classList.contains('checked_button_' + player)){
+    if (board[i][staticX].classList.contains('checked_button_' + player)) {
       inRowPoints++
     }
-    if (inRowPoints === 5){
+    if (inRowPoints === 5) {
       return player
-    } 
+    }
   }
   inRowPoints = 0
 
   for (let i = startButton; i <= endButton; i++) {
-    if(board[staticY][i].classList.contains('checked_button_' + player)) {
+    if (board[staticY][i].classList.contains('checked_button_' + player)) {
       inRowPoints++
     }
-    if (inRowPoints === 5){
+    if (inRowPoints === 5) {
       return player
     }
   }
   inRowPoints = 0
 
-  // for (let i = startRow; i <= endRow; i++) {
-  //   for (let j = startButton; j <= endButton; i++) {
-  //     if(board[i][j].classList.contains('checked_button_' + player)) {
-  //       inRowPoints++
-  //     }
-  //     if (inRowPoints === 5){
-  //       return player
-  //     }
+  let startButtonDiagonal = staticX - 4
+  let buttonLoop = startRow > 4 ? startButtonDiagonal : staticX - (staticY - startRow)
+  for (let i = startRow; i <= endRow; i++) {
+    if (typeof board[i][buttonLoop] !== 'undefined') {
+      if (board[i][buttonLoop].classList.contains('checked_button_' + player)) {
+        inRowPoints++
+        if (inRowPoints === 5) {
+          return player
+        }
+      }
+    }
+    
+    buttonLoop++
+  }
+  inRowPoints = 0
+
+  buttonLoop = (selectedSize - 1) - staticY >= 4 ? startButtonDiagonal: staticX - ((selectedSize - 1) - staticY)
+  for (let i = endRow; i >= startRow; i--) {
+    if (typeof board[i][buttonLoop] !== 'undefined') {
+      if (board[i][buttonLoop].classList.contains('checked_button_' + player)) {
+        inRowPoints++
+        if (inRowPoints === 5) {
+          return player
+        }
+      }
+    }
+    buttonLoop++
+  }
+  inRowPoints = 0
+  
+  // startButton = startButton
+  // for (let i = endRow; i >= startRow; i--) {
+  //   if (board[i][startButton].classList.contains('checked_button_' + player)) {
+  //     inRowPoints++
+  //     startButton++
+  //   }
+  //   if (inRowPoints === 5) {
+  //     return player
   //   }
   // }
   // inRowPoints = 0
